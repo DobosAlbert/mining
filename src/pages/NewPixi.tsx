@@ -1,0 +1,142 @@
+import React, { useEffect, useRef } from 'react';
+import * as PIXI from 'pixi.js';
+
+import image1 from './images/omulet.svg';//omu
+import image2 from './images/workspace.png';//tv-ul
+import image3 from './images/6663360-transformed.png';//floarea 
+import image4 from './images/albert_poza3x.png';//
+import image5 from './images/834825_preview.jpg';
+import image6 from './images/cupboard-transformed.png';
+import image7 from './images/garbage-bin.png';
+import image8 from './images/clock.png';
+
+const PixiComponent: React.FC<Props> = ({children}) => {
+    const gameCanvas = useRef<HTMLDivElement | null>(null);
+    const sprites = useRef<PIXI.Sprite[]>([]);
+    const backgroundSprite = useRef<PIXI.Sprite | null>(null);
+    const app = new PIXI.Application({
+        width: 1080,
+        height: window.innerHeight,
+        backgroundColor: 0xFFFFFF,
+        antialias: true
+    });
+
+    useEffect(() => {
+        if (gameCanvas.current) {
+            gameCanvas.current.appendChild(app.view as unknown as Node);
+            // (app.renderer.view as any).style.position = 'absolute';
+    
+            const backgroundTexture = PIXI.Texture.from(image5);
+            const sprite = new PIXI.Sprite(backgroundTexture);
+            app.stage.addChild(sprite);
+    
+    backgroundSprite.current = sprite;
+    
+            const textures = [
+                PIXI.Texture.from(image1),
+                PIXI.Texture.from(image2),
+                 PIXI.Texture.from(image3),
+                 PIXI.Texture.from(image4),
+                 PIXI.Texture.from(image6),
+                 PIXI.Texture.from(image7),
+                 PIXI.Texture.from(image8),
+            ];
+    
+            sprites.current = textures.map(texture => {
+                const sprite = new PIXI.Sprite(texture);
+                app.stage.addChild(sprite);
+                return sprite;
+            });
+    
+            window.addEventListener("keydown", handleKeydown);
+            window.addEventListener('resize', resize);
+    
+            resize();
+        }
+    
+        return () => {
+            window.removeEventListener("keydown", handleKeydown);
+            window.removeEventListener('resize', resize);
+        }
+    }, []);
+
+    const handleKeydown = (e: KeyboardEvent) => {
+        const speed = 10; // viteză în pixeli
+        const sprite = sprites.current[0]; // presupunem că image1 este primul sprite în array
+    
+        switch(e.key) {
+            case "ArrowRight":
+                sprite.x += speed;
+                break;
+            case "ArrowLeft":
+                sprite.x -= speed;
+                break;
+            case "ArrowUp":
+                sprite.y -= speed;
+                break;
+            case "ArrowDown":
+                sprite.y += speed;
+                break;
+        }
+    }
+
+    const resize = () => {
+
+        app.renderer.resize(window.innerWidth, window.innerHeight); // Ajustează dimensiunile renderer-ului la dimensiunile ferestrei
+
+        if (backgroundSprite.current) {
+            backgroundSprite.current.width = window.innerWidth;
+            backgroundSprite.current.height = window.innerHeight;
+            backgroundSprite.current.x = 0;
+        }
+    
+        const sizes = [9, 7, 9.09, 5.5, 8, 9, 14, 3];
+        const heights = [3, 3, 3.22, 5, 2.5, 8, 7, 8.33];
+        const widths = [2.6, 3.8, 1.1, 4, 1.2, 2.2, 1.5, 6];
+        const positions = [2.3, 1.8, 1.6, 40, 60, 1.3, 19, 2];
+    
+        for (let i = 0; i < sprites.current.length; i++) {
+            if (sprites.current[i]) {
+                sprites.current[i].width = window.innerWidth / sizes[i];
+                sprites.current[i].height = window.innerHeight / heights[i];
+                sprites.current[i].x = window.innerWidth / widths[i];
+                sprites.current[i].y = window.innerHeight / positions[i];
+            }
+        }
+    }        
+
+        return <div style={{
+            position: 'relative',
+            height: '100%',
+            width: '100%',
+            backgroundColor: 'yourBackgroundColorHere' // background color of your choice
+        }}>
+            <div ref={gameCanvas}>
+                {children}
+            </div>
+        </div>
+}
+interface Props{
+    children: React.ReactNode
+}
+
+export default PixiComponent;
+
+// const loader = PIXI.Loader.shared;
+
+// loader.add('tileset1', './images/spritesheet.json')
+// .load(setup2);
+
+// function setup2(loader, resources) {
+//     const textures = [];
+//     for(let i = 1; i < 9; i++) {
+//         const texture = PIXI.Texture.from(`ceas${i}.png`);
+//         textures.push(texture);
+//     }
+//     const drag = new PIXI.AnimatedSprite(textures);
+//     drag.position.set(800, 300);
+//     drag.scale.set(2, 2);
+//     app.stage.addChild(drag);
+//     drag.play();
+//     drag.animationSpeed = 0.1;
+// }

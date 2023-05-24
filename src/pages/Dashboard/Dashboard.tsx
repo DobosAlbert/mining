@@ -1,3 +1,8 @@
+import './Dashboard.css'
+import PixiComponent from '../NewPixi'
 export const Dashboard = () => (
-  <h1>Dashboard</h1>
+  <div>
+    <PixiComponent>
+    </PixiComponent>
+  </div>
 );
