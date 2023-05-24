@@ -13,7 +13,7 @@
     "@multiversx/sdk-dapp": "2.9.1",
     "@multiversx/sdk-network-providers": "1.2.1",
     "axios": "0.24.0",
-    "bootstrap": "4.6.2",
+    "bootstrap": "^5.2.3",
     "moment": "2.29.4",
     "pixi.js": "^7.2.4",
     "react": "18.2.0",

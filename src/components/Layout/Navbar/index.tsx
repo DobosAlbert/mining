@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  faChartSimple,
-  faFileSignature
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useGetIsLoggedIn } from '@multiversx/sdk-dapp/hooks';
 import { logout } from '@multiversx/sdk-dapp/utils';
 import { Navbar as BsNavbar, NavItem, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { dAppName } from 'config';
 import { routeNames } from 'routes';
 import './Navbar.css';
 import { ReactComponent as MultiversXLogo } from '../../../assets/img/multiversx.svg';
@@ -21,16 +15,16 @@ export const Navbar = () => {
   };
 
   return (
-    <BsNavbar className='bg-dark border-bottom px-4 py-3'>
-      <div className='d-flex justify-content-between'>
+    <BsNavbar bg="light" expand="lg" className='bg-dark border-bottom px-4 py-3'>
+      <BsNavbar.Brand className='text-light' href="#home">
         <Link
           className='d-flex align-items-center navbar-brand mr-0'
           to={isLoggedIn ? routeNames.dashboard : routeNames.home}
         >
           <MultiversXLogo className='multiversx-logo'/>
         </Link>
-
-        <div className="all-buttons flex-grow-1">
+      </BsNavbar.Brand>
+      <div className="all-buttons flex-grow-1">
           <div className="centered-buttons">
             <button className="btn-hover color-1">Mine</button>
             <button className="btn-hover color-1">Shop</button>
@@ -44,7 +38,6 @@ export const Navbar = () => {
               <button className="btn-hover color-1">Your Reward</button>
            </div> 
         </div>
-
         <Nav className='ml-auto'>
           {isLoggedIn && (
             <>
@@ -56,7 +49,6 @@ export const Navbar = () => {
             </>
           )}
         </Nav>
-      </div>
     </BsNavbar>
   );
 };
